@@ -1,0 +1,86 @@
+<header>
+</header>
+
+<section>
+</section>
+
+<link rel="stylesheet" href="style/bootstrap.css">
+<link rel="stylesheet" href="style/style.css">
+<script src="js/jquery-3.2.1.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<script>
+var header = document.querySelector('header');
+var section = document.querySelector('section');
+
+var requestURL = 'https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json';
+var request = new XMLHttpRequest();
+request.open('GET', requestURL);
+request.responseType = 'json';
+request.send();
+
+request.onload = function() {
+    var superHeroes = request.response;
+    populateHeader(superHeroes);
+    showHeroes(superHeroes);
+}
+
+function populateHeader(jsonObj) {
+    var myH1 = document.createElement('h1');
+    myH1.textContent = jsonObj['squadName'];
+    header.appendChild(myH1);
+    
+    var myPara = document.createElement('p');
+    myPara.textContent = 'Hometown: ' + jsonObj['homeTown'] + ' // Formed: ' + jsonObj['formed'];
+    header.appendChild(myPara);
+}
+
+function showHeroes(jsonObj) {
+    var heroes = jsonObj['members'];
+    
+    var container0 = document.createElement('div');
+    container0.id = "container0";
+    container0.classList.add("container-fluid");
+    
+    var container1 = document.createElement('div');
+    container1.id = "container1";
+    container1.classList.add("row");
+    
+    for (var i = 0; i < heroes.length; i++) {
+        var container2 = document.createElement('div');
+        container2.id = "container2";
+        container2.classList.add("charBox", "col-lg-4");
+        container2.classList.add("col-sm-12");
+        container2.classList.add("col-xs-12");
+        var myArticle = document.createElement('article');
+        var myH2 = document.createElement('h2');
+        var myPara1 = document.createElement('p');
+        var myPara2 = document.createElement('p');
+        var myPara3 = document.createElement('p');
+        var myList = document.createElement('ul');
+        
+        myH2.textContent = heroes[i].name;
+        myPara1.textContent = 'Secret identity: ' + heroes[i].secretIdentity;
+        myPara2.textContent = 'Age: ' + heroes[i].age;
+        myPara3.textContent = 'Superpowers:';
+        
+        var superPowers = heroes[i].powers;
+        for (var j = 0; j < superPowers.length; j++) {
+            var listItem = document.createElement('li');
+            listItem.textContent = superPowers[j];
+            myList.appendChild(listItem);
+        }
+        
+        //section->container0->container1->container2->myArticle
+        myArticle.appendChild(myH2);
+        myArticle.appendChild(myPara1);
+        myArticle.appendChild(myPara2);
+        myArticle.appendChild(myPara3);
+        myArticle.appendChild(myList);
+        container2.appendChild(myArticle);
+        container1.appendChild(container2);
+        container0.appendChild(container1);
+        section.appendChild(container0);
+    }
+}
+</script>
